@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Прием платежа с помощью виджета ЮKassa</title>
+
+
+    <script src="https://static.yoomoney.ru/checkout-js/v1/checkout.js"></script>
+</head>
+
+<body>
+    <p>Ниже отобразится платежная форма. Если вы еще не создавали платеж и не передавали токен для инициализации
+        виджета, появится сообщение об ошибке.</p>
+
+
+    <div id="payment-form"></div>
+
+    <p>Данные банковской карты для оплаты в <b>тестовом магазине</b>:</p>
+    <ul>
+        <li>номер — <b>5555 5555 5555 4477</b></li>
+        <li>срок действия — <b>01/30</b> (или другая дата, больше текущей)</li>
+        <li>CVC — <b>123</b> (или три любые цифры)</li>
+        <li>код для прохождения 3-D Secure — <b>123</b> (или три любые цифры)</li>
+    </ul>
+    <p><a class="bbb" href='#'>Другие тестовые банковские карты</a></p>
+
+    <script>
+        const checkout = YooMoneyCheckout('live_j6dHxf_ILUDDboEvdFNxA91fnGdiWbwYZVRMXMc12U', {
+            language: 'ru'
+        });
+
+        document.querySelector('.bbb').addEventListener('click', (e) => {
+            e.preventDefault();
+            checkout.tokenize({
+                number: '5555 5555 5555 4477',
+                cvc: '123',
+                month: '01',
+                year: '30'
+            }).then(res => {
+                if (res.status === 'success') {
+                    const { paymentToken } = res.data.response;
+                    console.log(paymentToken);
+
+                    return paymentToken;
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
